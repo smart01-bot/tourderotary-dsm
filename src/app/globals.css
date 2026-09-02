@@ -35,12 +35,10 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Headings inherit Montserrat weight from tailwind config */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-sans);
   }
 
-  /* Reduce motion for accessibility */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
@@ -65,7 +63,6 @@
     @apply text-xs font-semibold uppercase tracking-[0.15em];
   }
 
-  /* Gold underline accent */
   .underline-gold {
     position: relative;
   }
@@ -81,7 +78,6 @@
     border-radius: 2px;
   }
 
-  /* Road stripe overlay (used in hero bg) */
   .road-stripe-overlay {
     background-image: repeating-linear-gradient(
       135deg,
@@ -92,7 +88,6 @@
     );
   }
 
-  /* Clip-path: diagonal bottom edge for sections */
   .clip-bottom-diagonal {
     clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
   }
@@ -104,23 +99,19 @@
 
 /* ── Component classes ────────────────────────────────────────────────────── */
 @layer components {
-  /* Container */
   .container-site {
     @apply max-w-7xl mx-auto px-6 lg:px-8;
   }
 
-  /* Gold divider line */
   .divider-gold {
     @apply h-px w-full;
     background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
   }
 
-  /* Focus ring — brand-consistent */
   .focus-ring {
     @apply outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2;
   }
 
-  /* Countdown digit cell */
   .countdown-cell {
     @apply flex flex-col items-center;
   }
@@ -133,10 +124,9 @@
     @apply text-eyebrow text-white/60 mt-1;
   }
 
-  /* Activity card hover state */
   .activity-card {
-    @apply relative overflow-hidden rounded-card border border-white/10 bg-navy-900/60 
-           backdrop-blur-sm transition-all duration-300 ease-smooth
+    @apply relative overflow-hidden rounded-card border border-white/10 bg-navy-900/60
+           backdrop-blur-sm transition-all duration-300 ease-in-out
            hover:border-gold/40 hover:shadow-card-gold hover:-translate-y-1;
   }
 }
