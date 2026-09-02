@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Brand CSS custom properties ──────────────────────────────────────────── */
+:root {
+  --color-navy:    #0D1B3D;
+  --color-gold:    #D9A017;
+  --color-magenta: #E91E63;
+  --color-white:   #FFFFFF;
+  --color-offwhite: #F7F6F3;
+
+  --font-sans: 'Montserrat', system-ui, sans-serif;
+
+  --section-py: 6rem;
+  --section-py-sm: 4rem;
+  --container-px: 1.5rem;
+}
+
+/* ── Base reset & defaults ────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-white);
+    color: var(--color-navy);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Headings inherit Montserrat weight from tailwind config */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ── Typography utilities ─────────────────────────────────────────────────── */
+@layer utilities {
+  .text-display-hero {
+    @apply text-display-2xl font-black tracking-tight leading-none;
+  }
+
+  .text-section-heading {
+    @apply text-display-md font-bold tracking-tight;
+  }
+
+  .text-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.15em];
+  }
+
+  /* Gold underline accent */
+  .underline-gold {
+    position: relative;
+  }
+
+  .underline-gold::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 48px;
+    height: 3px;
+    background-color: var(--color-gold);
+    border-radius: 2px;
+  }
+
+  /* Road stripe overlay (used in hero bg) */
+  .road-stripe-overlay {
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent 28px,
+      rgba(217, 160, 23, 0.06) 28px,
+      rgba(217, 160, 23, 0.06) 32px
+    );
+  }
+
+  /* Clip-path: diagonal bottom edge for sections */
+  .clip-bottom-diagonal {
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+  }
+
+  .clip-top-diagonal {
+    clip-path: polygon(0 4%, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+/* ── Component classes ────────────────────────────────────────────────────── */
+@layer components {
+  /* Container */
+  .container-site {
+    @apply max-w-7xl mx-auto px-6 lg:px-8;
+  }
+
+  /* Gold divider line */
+  .divider-gold {
+    @apply h-px w-full;
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  }
+
+  /* Focus ring — brand-consistent */
+  .focus-ring {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2;
+  }
+
+  /* Countdown digit cell */
+  .countdown-cell {
+    @apply flex flex-col items-center;
+  }
+
+  .countdown-digit {
+    @apply text-4xl sm:text-5xl font-black text-gold leading-none tabular-nums;
+  }
+
+  .countdown-label {
+    @apply text-eyebrow text-white/60 mt-1;
+  }
+
+  /* Activity card hover state */
+  .activity-card {
+    @apply relative overflow-hidden rounded-card border border-white/10 bg-navy-900/60 
+           backdrop-blur-sm transition-all duration-300 ease-smooth
+           hover:border-gold/40 hover:shadow-card-gold hover:-translate-y-1;
+  }
+}
