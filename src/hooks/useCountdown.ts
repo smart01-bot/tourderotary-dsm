@@ -23,18 +23,20 @@ function computeCountdown(target: Date): CountdownValues {
 
 /**
  * useCountdown — ticks every second, targeting EVENT_DATE by default.
- * Cleans up the interval on unmount.
+ * Initialises with zeros to avoid SSR/client hydration mismatch.
+ * useEffect computes the real value immediately on client mount.
  */
 export function useCountdown(target: Date = EVENT_DATE): CountdownValues & { formatted: { days: string; hours: string; minutes: string; seconds: string } } {
-  const [values, setValues] = useState<CountdownValues>(() => computeCountdown(target))
+  const [values, setValues] = useState<CountdownValues>({
+    days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: false,
+  })
 
   const tick = useCallback(() => {
     setValues(computeCountdown(target))
   }, [target])
 
   useEffect(() => {
-    // Tick immediately so there's no initial stale display
-    tick()
+    tick()                               // compute real value immediately on mount
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
   }, [tick])

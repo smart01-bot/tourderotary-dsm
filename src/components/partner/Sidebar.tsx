@@ -109,7 +109,7 @@ export function Sidebar() {
       <div className="hidden lg:flex fixed inset-y-0 left-0 z-40">{panel}</div>
 
       <div className={cn(
-        'lg:hidden fixed inset-y-0 left-0 z-50 transition-transform duration-300 ease-smooth',
+        'lg:hidden fixed inset-y-0 left-0 z-50 transition-transform duration-300 ease-in-out',
         open ? 'translate-x-0' : '-translate-x-full'
       )}>
         {panel}

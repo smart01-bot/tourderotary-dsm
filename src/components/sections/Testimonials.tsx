@@ -2,21 +2,21 @@ import { Quote } from 'lucide-react'
 
 const TESTIMONIALS = [
   {
-    quote: "Riding for a cause makes every kilometre feel like it counts double. Tour de Rotary DSM is the event I'll talk about for years.",
+    quote: `Riding for a cause makes every kilometre feel like it counts double. Tour de Rotary DSM is the event I'll talk about for years.`,
     name: 'Amina M.',
     role: 'Cyclathon participant, 2025',
     initials: 'AM',
     color: 'bg-gold text-navy',
   },
   {
-    quote: "My family has been touched by cancer. Being part of this event was healing in a way I didn't expect. I'll be back in 2026.",
+    quote: `My family has been touched by cancer. Being part of this event was healing in a way I didn't expect. I'll be back in 2026.`,
     name: 'Joash K.',
     role: 'Marathon finisher, 2025',
     initials: 'JK',
     color: 'bg-magenta text-white',
   },
   {
-    quote: "The Zumba session was the most fun I've had at any charity event. Rotaract knows how to bring Dar es Salaam together.",
+    quote: `The Zumba session was the most fun I've had at any charity event. Rotaract knows how to bring Dar es Salaam together.`,
     name: 'Fatuma N.',
     role: 'Zumba participant, 2025',
     initials: 'FN',

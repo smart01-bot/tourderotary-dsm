@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Copy, Check, Share2 } from 'lucide-react'
+import { Copy, Check, Share2, Link2, MessageCircle } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { referralSlug } from '@/lib/utils'
 import { SITE } from '@/config/site'
@@ -9,8 +9,8 @@ import { SITE } from '@/config/site'
 interface Props { userId: string }
 
 export function ReferralCard({ userId }: Props) {
-  const code = referralSlug(userId)
-  const link = `${SITE.url}/signup?ref=${code}`
+  const code    = referralSlug(userId)
+  const link    = `${SITE.url}/signup?ref=${code}`
   const [copied, setCopied] = useState(false)
 
   const handleCopy = async () => {
@@ -32,38 +32,78 @@ export function ReferralCard({ userId }: Props) {
   }
 
   return (
-    <div className="rounded-2xl border border-navy/12 bg-white p-5">
-      <div className="flex items-center gap-2 mb-1">
-        <Share2 size={16} className="text-gold" />
-        <h3 className="font-bold text-navy">Your referral link</h3>
-      </div>
-      <p className="text-xs text-navy/50 mb-4">
-        Share this with friends and family to invite them to join.
-      </p>
+    <div className="space-y-4 max-w-md">
 
-      <div className="flex items-center gap-2 p-3 rounded-xl bg-navy/4 border border-navy/10 mb-4">
-        <p className="text-xs font-mono text-navy/65 flex-1 truncate">{link}</p>
-        <button
-          onClick={handleCopy}
-          className="shrink-0 text-navy/35 hover:text-navy transition-colors"
-          aria-label="Copy link"
-        >
-          {copied
-            ? <Check size={16} className="text-green-600" />
-            : <Copy size={16} />
-          }
-        </button>
+      {/* Link card */}
+      <div className="rounded-2xl border border-navy/12 bg-white p-5">
+        <p className="text-[10px] font-semibold text-navy/50 uppercase tracking-widest mb-3">
+          Your referral link
+        </p>
+        <div className="flex gap-2 mb-5">
+          <div className="flex-1 bg-[#F7F6F3] rounded-xl px-3.5 py-3 border border-navy/10">
+            <p className="text-xs font-mono text-navy/65 truncate">{link}</p>
+          </div>
+          <button
+            onClick={handleCopy}
+            className="shrink-0 px-4 rounded-xl font-bold text-xs transition-colors flex items-center gap-2 border"
+            style={{
+              background: copied ? '#22c55e' : '#0D1B3D',
+              color: '#fff',
+              borderColor: copied ? '#22c55e' : '#0D1B3D',
+            }}
+          >
+            {copied ? <Check size={13} /> : <Copy size={13} />}
+            {copied ? 'Copied!' : 'Copy'}
+          </button>
+        </div>
+
+        {/* Share channels */}
+        <p className="text-[10px] font-semibold text-navy/40 uppercase tracking-widest mb-3">
+          Share via
+        </p>
+        <div className="flex gap-2">
+          {['WhatsApp', 'X / Twitter', 'Facebook', 'Email'].map(ch => (
+            <button
+              key={ch}
+              className="flex-1 py-2.5 rounded-xl border border-navy/12 text-xs font-bold text-navy/70 hover:border-navy/30 hover:text-navy transition-colors"
+            >
+              {ch}
+            </button>
+          ))}
+        </div>
       </div>
 
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { value: '0',      label: 'Link clicks'     },
+          { value: '0',      label: 'Signed up'        },
+          { value: 'TSh 0',  label: 'Raised via refs'  },
+        ].map(s => (
+          <div key={s.label} className="rounded-2xl border border-navy/10 bg-white p-4 text-center">
+            <p className="text-xl font-black text-navy mb-1">{s.value}</p>
+            <p className="text-[10px] font-semibold text-navy/50 uppercase tracking-wide leading-tight">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* CTA */}
       <div className="flex gap-2">
         <Button
           size="sm"
           onClick={handleCopy}
           leftIcon={copied ? <Check size={14} /> : <Copy size={14} />}
+          fullWidth
         >
           {copied ? 'Copied!' : 'Copy link'}
         </Button>
-        <Button variant="secondary" size="sm" onClick={handleShare} leftIcon={<Share2 size={14} />}>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={handleShare}
+          leftIcon={<Share2 size={14} />}
+          fullWidth
+        >
           Share
         </Button>
       </div>

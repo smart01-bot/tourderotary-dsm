@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ShoppingCart } from 'lucide-react'
+import { ShoppingCart, ShoppingBag } from 'lucide-react'
 import { useUser } from '@/hooks/useUser'
 import { useCart } from '@/hooks/useCart'
 import { getProducts } from '@/lib/supabase/queries/participant'
@@ -23,11 +23,11 @@ type DBProduct = {
 }
 
 export default function MerchPage() {
-  const { user }                               = useUser()
-  const { addItem, items, totalItems }         = useCart()
-  const [products,      setProducts]           = useState<DBProduct[]>([])
-  const [loading,       setLoading]            = useState(true)
-  const [selectedSizes, setSelectedSizes]      = useState<Record<string, string>>({})
+  const { user }                          = useUser()
+  const { addItem, items, totalItems }    = useCart()
+  const [products, setProducts]           = useState<DBProduct[]>([])
+  const [loading, setLoading]             = useState(true)
+  const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({})
 
   useEffect(() => {
     getProducts().then(({ data }) => {
@@ -50,17 +50,18 @@ export default function MerchPage() {
 
   return (
     <div className="space-y-6 max-w-4xl">
-      <div className="flex items-start justify-between">
+
+      <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-display-sm font-black text-navy mb-1">Merch</h1>
+          <h1 className="text-2xl font-black text-navy mb-1">Merch</h1>
           <p className="text-navy/50 text-sm">
             {user ? 'Participant pricing applied.' : 'Sign in for participant pricing.'}
           </p>
         </div>
         {totalItems > 0 && (
-          <div className="flex items-center gap-2 bg-navy text-white px-3 py-1.5 rounded-xl text-sm font-semibold">
-            <ShoppingCart size={16} />
-            {totalItems} item{totalItems !== 1 ? 's' : ''}
+          <div className="flex items-center gap-2 bg-navy text-white px-3.5 py-2 rounded-xl text-sm font-bold">
+            <ShoppingCart size={15} />
+            {totalItems} {totalItems !== 1 ? 'items' : 'item'}
           </div>
         )}
       </div>
@@ -72,8 +73,10 @@ export default function MerchPage() {
           ))}
         </div>
       ) : products.length === 0 ? (
-        <div className="py-20 text-center rounded-2xl border border-navy/10 bg-white">
-          <p className="text-navy/50 text-sm">Merch coming soon — check back closer to the event.</p>
+        <div className="rounded-2xl border border-navy/10 bg-white px-6 py-16 text-center">
+          <ShoppingBag size={40} className="text-navy/20 mx-auto mb-4" strokeWidth={1.2} />
+          <p className="font-bold text-navy mb-1">Merch coming soon</p>
+          <p className="text-sm text-navy/50">Check back closer to the event for official gear.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -81,27 +84,40 @@ export default function MerchPage() {
             const price        = user ? product.price_participant : product.price_public
             const hasSize      = product.sizes.length > 0
             const selectedSize = selectedSizes[product.id]
-            const inCart       = items.filter(i => i.productId === product.id).reduce((n, i) => n + i.quantity, 0)
+            const inCart       = items
+              .filter(i => i.productId === product.id)
+              .reduce((n, i) => n + i.quantity, 0)
 
             return (
-              <div key={product.id} className="rounded-2xl border border-navy/12 bg-white overflow-hidden flex flex-col">
+              <div
+                key={product.id}
+                className="rounded-2xl border border-navy/12 bg-white overflow-hidden flex flex-col"
+              >
                 {/* Image */}
-                <div className="h-40 bg-navy/5 flex items-center justify-center">
+                <div className="h-40 bg-[#F7F6F3] flex items-center justify-center relative">
                   {product.image_url ? (
-                    <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+                    <img
+                      src={product.image_url}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
-                    <span className="text-4xl">👕</span>
+                    <ShoppingBag size={36} className="text-navy/20" strokeWidth={1} />
+                  )}
+                  {product.category && (
+                    <div className="absolute top-3 right-3">
+                      <Badge variant="neutral" size="sm">{product.category}</Badge>
+                    </div>
                   )}
                 </div>
 
                 <div className="p-4 flex flex-col flex-1">
-                  <div className="flex items-start justify-between gap-2 mb-1">
-                    <h3 className="font-bold text-navy text-sm">{product.name}</h3>
-                    {product.category && <Badge variant="neutral" size="sm">{product.category}</Badge>}
-                  </div>
+                  <h3 className="font-black text-navy text-sm mb-1">{product.name}</h3>
 
                   {product.description && (
-                    <p className="text-xs text-navy/50 mb-3 line-clamp-2">{product.description}</p>
+                    <p className="text-xs text-navy/50 mb-3 line-clamp-2 leading-relaxed">
+                      {product.description}
+                    </p>
                   )}
 
                   {/* Size pills */}
@@ -110,12 +126,14 @@ export default function MerchPage() {
                       {product.sizes.map(size => (
                         <button
                           key={size}
-                          onClick={() => setSelectedSizes(prev => ({ ...prev, [product.id]: size }))}
+                          onClick={() =>
+                            setSelectedSizes(prev => ({ ...prev, [product.id]: size }))
+                          }
                           className={cn(
-                            'px-2 py-0.5 rounded-lg text-xs font-semibold border transition-all',
+                            'px-2.5 py-1 rounded-lg text-xs font-bold border transition-all',
                             selectedSize === size
-                              ? 'border-gold bg-gold/10 text-navy'
-                              : 'border-navy/15 text-navy/55 hover:border-navy/30'
+                              ? 'border-gold bg-gold/12 text-navy'
+                              : 'border-navy/12 text-navy/50 hover:border-navy/30'
                           )}
                         >
                           {size}
@@ -126,8 +144,10 @@ export default function MerchPage() {
 
                   <div className="flex items-center justify-between mt-auto">
                     <div>
-                      <p className="font-bold text-navy text-sm">{formatTSh(price)}</p>
-                      {inCart > 0 && <p className="text-[10px] text-navy/40">{inCart} in cart</p>}
+                      <p className="font-black text-navy text-sm">{formatTSh(price)}</p>
+                      {inCart > 0 && (
+                        <p className="text-[10px] text-navy/40 mt-0.5">{inCart} in cart</p>
+                      )}
                     </div>
                     <Button
                       size="sm"
@@ -135,7 +155,7 @@ export default function MerchPage() {
                       disabled={hasSize && !selectedSize}
                       title={hasSize && !selectedSize ? 'Select a size first' : undefined}
                     >
-                      Add
+                      {inCart > 0 ? 'Add more' : 'Add to cart'}
                     </Button>
                   </div>
                 </div>

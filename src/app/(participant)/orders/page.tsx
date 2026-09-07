@@ -1,9 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Package, ShoppingBag } from 'lucide-react'
+import Link from 'next/link'
 import { useUser } from '@/hooks/useUser'
 import { getMyOrders } from '@/lib/supabase/queries/participant'
 import { Badge } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
 import { cn, formatTSh } from '@/lib/utils'
 
 type DBOrder = {
@@ -18,7 +21,7 @@ const STATUS_BADGE: Record<string, {
   variant: 'success' | 'warning' | 'navy' | 'error' | 'neutral' | 'gold' | 'magenta'
 }> = {
   pending:    { label: 'Pending',    variant: 'warning' },
-  paid:       { label: 'Paid',       variant: 'success' },
+  paid:       { label: 'Paid ✓',    variant: 'success' },
   processing: { label: 'Processing', variant: 'navy'    },
   shipped:    { label: 'Shipped',    variant: 'gold'    },
   delivered:  { label: 'Delivered',  variant: 'success' },
@@ -26,9 +29,9 @@ const STATUS_BADGE: Record<string, {
 }
 
 export default function OrdersPage() {
-  const { user }                  = useUser()
-  const [orders,  setOrders]      = useState<DBOrder[]>([])
-  const [loading, setLoading]     = useState(true)
+  const { user }              = useUser()
+  const [orders, setOrders]   = useState<DBOrder[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!user) return
@@ -41,8 +44,8 @@ export default function OrdersPage() {
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-display-sm font-black text-navy mb-1">Orders</h1>
-        <p className="text-navy/50 text-sm">Your merch order history.</p>
+        <h1 className="text-2xl font-black text-navy mb-1">Orders</h1>
+        <p className="text-navy/50 text-sm">Your merch and event order history.</p>
       </div>
 
       {loading ? (
@@ -52,8 +55,13 @@ export default function OrdersPage() {
           ))}
         </div>
       ) : orders.length === 0 ? (
-        <div className="py-20 text-center rounded-2xl border border-navy/10 bg-white">
-          <p className="text-navy/50 text-sm">No orders yet.</p>
+        <div className="rounded-2xl border border-navy/10 bg-white px-6 py-16 text-center">
+          <Package size={40} className="text-navy/20 mx-auto mb-4" strokeWidth={1.2} />
+          <p className="font-bold text-navy mb-1">No orders yet</p>
+          <p className="text-sm text-navy/50 mb-6">Head to Merch to order your official race gear.</p>
+          <Link href="/merch">
+            <Button size="sm" leftIcon={<ShoppingBag size={14} />}>Browse merch</Button>
+          </Link>
         </div>
       ) : (
         <div className="rounded-2xl border border-navy/12 bg-white overflow-hidden">
@@ -63,7 +71,7 @@ export default function OrdersPage() {
               <div
                 key={order.id}
                 className={cn(
-                  'flex items-center justify-between px-5 py-4',
+                  'flex items-center justify-between px-5 py-4 hover:bg-[#F7F6F3] transition-colors',
                   i !== 0 && 'border-t border-navy/8'
                 )}
               >
